@@ -34,6 +34,7 @@ export default function Home() {
           </ul>
 
           <a href="/login" className="nav-button">Login / Sign Up</a>
+          <button className="nav-button">Login / Sign Up</button>
         </div>
       </nav>
 
