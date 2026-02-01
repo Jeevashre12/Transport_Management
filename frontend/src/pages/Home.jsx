@@ -33,6 +33,7 @@ export default function Home() {
             <li><a href="#support" className="nav-link">Support</a></li>
           </ul>
 
+          <a href="/login" className="nav-button">Login / Sign Up</a>
           <button className="nav-button">Login / Sign Up</button>
         </div>
       </nav>
