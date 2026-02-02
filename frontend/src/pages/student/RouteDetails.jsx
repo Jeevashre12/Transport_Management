@@ -3,7 +3,6 @@ import routeBg from "../../assets/route_bg.jpeg";
 import "./RouteDetails.css";
 import SimpleMap from "../../components/SimpleMap";
 
-
 function RouteDetails() {
   const [selectedRoute, setSelectedRoute] = useState(null);
 
@@ -22,6 +21,7 @@ function RouteDetails() {
         { busNo: "Bus Number 20", driver: "Kumar", incharge: "Mahesh" }
       ]
     },
+
     {
       name: "Sathyamangalam – College",
       buses: 2,
@@ -34,6 +34,7 @@ function RouteDetails() {
         { busNo: "TN36 CD 1122", driver: "Senthil", incharge: "Ravi" }
       ]
     },
+
     {
       name: "Gobi – College",
       buses: 6,
@@ -46,27 +47,126 @@ function RouteDetails() {
         { busNo: "TN38 EF 3344", driver: "Arun", incharge: "Vijay" },
         { busNo: "TN38 EF 5566", driver: "Karthik", incharge: "Prakash" }
       ]
+    },
+
+    {
+      name: "Athani – College",
+      buses: 2,
+      stops: [
+        { name: "Athani", lat: 11.0822, lng: 77.3587 },
+        { name: "Perundurai", lat: 11.3148, lng: 77.5660 },
+        { name: "College", lat: 11.0123, lng: 77.5555 }
+      ],
+      busDetails: [
+        { busNo: "TN33 AT 2211", driver: "Ravi", incharge: "Suresh" }
+      ]
+    },
+
+    {
+      name: "Anthiyur – College",
+      buses: 2,
+      stops: [
+        { name: "Anthiyur", lat: 11.5756, lng: 77.5901 },
+        { name: "Bhavani", lat: 11.4456, lng: 77.6826 },
+        { name: "College", lat: 11.0123, lng: 77.5555 }
+      ],
+      busDetails: [
+        { busNo: "TN36 AN 3344", driver: "Mani", incharge: "Karthik" }
+      ]
+    },
+
+    {
+      name: "Komarapalayam – College",
+      buses: 2,
+      stops: [
+        { name: "Komarapalayam", lat: 11.4460, lng: 77.6937 },
+        { name: "Bhavani", lat: 11.4456, lng: 77.6826 },
+        { name: "College", lat: 11.0123, lng: 77.5555 }
+      ],
+      busDetails: [
+        { busNo: "TN28 KP 5566", driver: "Suresh", incharge: "Ramesh" }
+      ]
+    },
+
+    {
+      name: "Bhavani – College",
+      buses: 2,
+      stops: [
+        { name: "Bhavani", lat: 11.4456, lng: 77.6826 },
+        { name: "Perundurai", lat: 11.3148, lng: 77.5660 },
+        { name: "College", lat: 11.0123, lng: 77.5555 }
+      ],
+      busDetails: [
+        { busNo: "TN36 BH 7788", driver: "Arun", incharge: "Vijay" }
+      ]
+    },
+
+    {
+      name: "Tiruppur – College",
+      buses: 13,
+      stops: [
+        { name: "Tiruppur", lat: 11.1085, lng: 77.3411 },
+        { name: "Kangeyam", lat: 11.0457, lng: 77.5360 },
+        { name: "College", lat: 11.0123, lng: 77.5555 }
+      ],
+      busDetails: [
+        { busNo: "TN39 TP 8899", driver: "Kumar", incharge: "Ravi" }
+      ]
+    },
+
+    {
+      name: "Avinashi – College",
+      buses: 1,
+      stops: [
+        { name: "Avinashi", lat: 11.1923, lng: 77.2680 },
+        { name: "Tiruppur", lat: 11.1085, lng: 77.3411 },
+        { name: "College", lat: 11.0123, lng: 77.5555 }
+      ],
+      busDetails: [
+        { busNo: "TN39 AV 1122", driver: "Senthil", incharge: "Prakash" }
+      ]
+    },
+
+    {
+      name: "Chennimalai – College",
+      buses: 2,
+      stops: [
+        { name: "Chennimalai", lat: 11.1606, lng: 77.6031 },
+        { name: "Perundurai", lat: 11.3148, lng: 77.5660 },
+        { name: "College", lat: 11.0123, lng: 77.5555 }
+      ],
+      busDetails: [
+        { busNo: "TN33 CM 4455", driver: "Manoj", incharge: "Suresh" }
+      ]
+    },
+
+    {
+      name: "Perundurai Bus Stand – College",
+      buses: 7,
+      stops: [
+        { name: "Perundurai Bus Stand", lat: 11.2743, lng: 77.5832 },
+        { name: "Perundurai", lat: 11.3148, lng: 77.5660 },
+        { name: "College", lat: 11.0123, lng: 77.5555 }
+      ],
+      busDetails: [
+        { busNo: "TN33 PD 6677", driver: "Prakash", incharge: "Senthil" }
+      ]
     }
   ];
 
   return (
     <div>
-      {/* HERO SECTION */}
-      <div
-        className="hero"
-        style={{ backgroundImage: `url(${routeBg})` }}
-      >
+      {/* HERO */}
+      <div className="hero" style={{ backgroundImage: `url(${routeBg})` }}>
         <div className="hero-inner">
-          <div className="hero-content">
-            <h1 className="hero-title">Transport Routes</h1>
-            <p className="hero-subtitle">
-              Check all available routes to your college here
-            </p>
-          </div>
+          <h1 className="hero-title">Transport Routes</h1>
+          <p className="hero-subtitle">
+            Check all available routes to your college here
+          </p>
         </div>
       </div>
 
-      {/* ROUTE TABLE */}
+      {/* TABLE */}
       <div className="route-container">
         <table className="route-table">
           <thead>
@@ -92,49 +192,42 @@ function RouteDetails() {
         </table>
       </div>
 
-      {/* DETAILS MODAL */}
+      {/* MODAL */}
       {selectedRoute && (
         <div className="modal-overlay">
           <div className="modal">
             <h3>{selectedRoute.name}</h3>
 
-            {/* MINI MAP */}
-            <div style={{ width: "100%", height: "200px", marginBottom: "15px" }}>
+            <div style={{ height: "200px", marginBottom: "15px" }}>
               <SimpleMap stops={selectedRoute.stops} />
             </div>
 
-            {/* STOPS SECTION */}
-            <div className="modal-section">
-              <h4>Stoppings</h4>
-              <ul className="stops-list">
-                {selectedRoute.stops.map((stop, i) => (
-                  <li key={i}>{stop.name}</li>
-                ))}
-              </ul>
-            </div>
+            <h4>Stoppings</h4>
+            <ul>
+              {selectedRoute.stops.map((s, i) => (
+                <li key={i}>{s.name}</li>
+              ))}
+            </ul>
 
-            {/* BUS DETAILS SECTION */}
-            <div className="modal-section">
-              <h4>Bus Details</h4>
-              <table className="modal-table">
-                <thead>
-                  <tr>
-                    <th>Bus No</th>
-                    <th>Driver</th>
-                    <th>Incharge</th>
+            <h4>Bus Details</h4>
+            <table className="modal-table">
+              <thead>
+                <tr>
+                  <th>Bus No</th>
+                  <th>Driver</th>
+                  <th>Incharge</th>
+                </tr>
+              </thead>
+              <tbody>
+                {selectedRoute.busDetails.map((b, i) => (
+                  <tr key={i}>
+                    <td>{b.busNo}</td>
+                    <td>{b.driver}</td>
+                    <td>{b.incharge}</td>
                   </tr>
-                </thead>
-                <tbody>
-                  {selectedRoute.busDetails.map((bus, i) => (
-                    <tr key={i}>
-                      <td>{bus.busNo}</td>
-                      <td className="driver">{bus.driver}</td>
-                      <td className="incharge">{bus.incharge}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                ))}
+              </tbody>
+            </table>
 
             <button onClick={() => setSelectedRoute(null)}>Close</button>
           </div>

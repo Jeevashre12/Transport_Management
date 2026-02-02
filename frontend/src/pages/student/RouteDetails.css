@@ -12,6 +12,7 @@
   background-size: cover;
   background-position: center;
   position: relative;
+  color: #ddd;
 }
 
 .hero::after {
@@ -24,11 +25,13 @@
 .hero-inner {
   height: 100%;
   display: flex;
+  flex-direction: column; 
   align-items: center;
   justify-content: center;
   position: relative;
   z-index: 1;
 }
+
 
 .hero-content {
   text-align: center;
@@ -36,9 +39,9 @@
 }
 
 .hero-title {
-  font-size: 3rem;
-  font-weight: 700;
-  margin-bottom: 10px;
+  position: relative; /* or absolute if you want it over the background */
+  z-index: 2;         /* make sure it stays above other elements */
+           /* adjust as needed */
 }
 
 .hero-subtitle {
@@ -51,9 +54,15 @@
   padding: 40px 20px;
   display: flex;
   justify-content: center;
-  margin-top: -250px;
+  margin-top: -200px;
   position: relative;
   z-index: 2;
+}
+.route-container {
+  padding: 40px 20px;
+  display: flex;
+  justify-content: center;
+  /* ❌ remove margin-top */
 }
 
 .route-table {
