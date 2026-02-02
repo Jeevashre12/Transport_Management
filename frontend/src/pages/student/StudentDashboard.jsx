@@ -21,8 +21,9 @@ function StudentDashboard() {
       return;
     }
     
-    if (!role.includes('student')) {
-      navigate('/');
+    // Check if user is an admin trying to access student dashboard
+    if (role && (role.toLowerCase().includes('transport') || role.toLowerCase().includes('admin'))) {
+      navigate('/transport/dashboard');
       return;
     }
     
@@ -49,6 +50,8 @@ function StudentDashboard() {
 
   const [busInfo, setBusInfo] = useState(null);
   const [showStudentForm, setShowStudentForm] = useState(false);
+  const [showRequestStatusModal, setShowRequestStatusModal] = useState(false);
+  const [myRequests, setMyRequests] = useState([]);
   const [studentFormData, setStudentFormData] = useState({
     studentName: "",
     rollNumber: "",
@@ -159,6 +162,16 @@ function StudentDashboard() {
     });
   };
 
+  const handleViewRequestStatus = () => {
+    // Load all requests from localStorage and filter by current student
+    const allRequests = JSON.parse(localStorage.getItem('busChangeRequests') || '[]');
+    const studentRequests = allRequests.filter(req => 
+      req.rollNumber === studentInfo.rollNumber
+    );
+    setMyRequests(studentRequests);
+    setShowRequestStatusModal(true);
+  };
+
   return (
     <div className="student-dashboard">
       {/* Header */}
@@ -188,6 +201,9 @@ function StudentDashboard() {
             <p>Roll Number: <span>{studentInfo.rollNumber || 'Not Set'}</span></p>
             <p>Department: <span>{studentInfo.department || 'Not Set'}</span></p>
           </div>
+          <button className="request-status-btn" onClick={handleViewRequestStatus} title="View Request Status">
+            🔔
+          </button>
           <button className="edit-student-btn" onClick={handleOpenStudentForm}>
             {studentInfo.name ? 'Edit Details' : 'Add Details'}
           </button>
@@ -354,7 +370,7 @@ function StudentDashboard() {
                 <div className="notifications-list">
                   {notifications.map((notif) => (
                     <div key={notif.id} className="notification-item">
-                      <span className={`notif-icon notif-${notif.type}`}>⚠</span>
+                      <span className={`notif-icon notif-${notif.type}`}></span>
                       <span className="notif-text">{notif.message}</span>
                     </div>
                   ))}
@@ -425,7 +441,59 @@ function StudentDashboard() {
           </div>
         </div>
       )}
-    </div>
+      {/* Request Status Modal */}
+      {showRequestStatusModal && (
+        <div className="modal-overlay" onClick={() => setShowRequestStatusModal(false)}>
+          <div className="modal-content request-status-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h2>My Request Status</h2>
+              <button className="close-btn" onClick={() => setShowRequestStatusModal(false)}>×</button>
+            </div>
+            <div className="modal-body">
+              {myRequests.length === 0 ? (
+                <p className="no-requests">You haven't made any route change requests yet</p>
+              ) : (
+                <div className="requests-list">
+                  {myRequests.map((request) => (
+                    <div key={request.id} className="request-status-card">
+                      <div className="request-status-header">
+                        <h3>Route Change Request</h3>
+                        <span className={`status-badge status-${request.status.toLowerCase()}`}>
+                          {request.status}
+                        </span>
+                      </div>
+                      <div className="request-status-details">
+                        <div className="detail-row">
+                          <span className="detail-label">Current Route:</span>
+                          <span className="detail-value">{request.currentRoute}</span>
+                        </div>
+                        <div className="detail-row">
+                          <span className="detail-label">Requested Route:</span>
+                          <span className="detail-value">{request.requestedRoute}</span>
+                        </div>
+                        <div className="detail-row">
+                          <span className="detail-label">Reason:</span>
+                          <span className="detail-value">{request.reason}</span>
+                        </div>
+                        <div className="detail-row">
+                          <span className="detail-label">Submitted:</span>
+                          <span className="detail-value">{request.submittedDate}</span>
+                        </div>
+                        {request.approvalReason && (
+                          <div className="detail-row approval-reason">
+                            <span className="detail-label">Admin Response:</span>
+                            <span className="detail-value">{request.approvalReason}</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}    </div>
   );
 }
 

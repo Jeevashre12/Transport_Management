@@ -1,65 +1,46 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./ApprovalSystem.css";
 
 const ApprovalSystem = () => {
-  const [requests, setRequests] = useState([
-    {
-      id: 1,
-      requestType: "Bus Change",
-      studentName: "Raj Kumar",
-      department: "CSE",
-      details: "Change from Route 5 to Route 8",
-      reason: "New route convenient for timing",
-      status: "Pending",
-      date: "2024-02-01",
-    },
-    {
-      id: 2,
-      requestType: "Extra Class Request",
-      studentName: "Priya Singh",
-      department: "ECE",
-      details: "Friday 6 PM class transportation",
-      reason: "Saturday exam prep needed",
-      status: "Pending",
-      date: "2024-02-01",
-    },
-    {
-      id: 3,
-      requestType: "Route Request",
-      studentName: "Amit Patel",
-      department: "ME",
-      details: "New route from Tech Park",
-      reason: "New residential area",
-      status: "Pending",
-      date: "2024-01-31",
-    },
-    {
-      id: 4,
-      requestType: "Bus Change",
-      studentName: "Sarah Ahmed",
-      department: "CSE",
-      details: "Change from Route 3 to Route 9",
-      reason: "Schedule conflict",
-      status: "Approved",
-      date: "2024-01-30",
-      approvalReason: "Approved - Route available",
-    },
-    {
-      id: 5,
-      requestType: "Extra Class Request",
-      studentName: "Vikram Sharma",
-      department: "IT",
-      details: "Sunday afternoon transportation",
-      reason: "Not applicable",
-      status: "Rejected",
-      date: "2024-01-29",
-      approvalReason: "No Sunday service available",
-    },
-  ]);
+  const [requests, setRequests] = useState([]);
+
+  useEffect(() => {
+    // Load bus change requests from localStorage and merge with existing requests
+    const loadRequests = () => {
+      const busChangeRequests = JSON.parse(localStorage.getItem('busChangeRequests') || '[]');
+      console.log('Loading bus change requests into ApprovalSystem:', busChangeRequests);
+      
+      // Convert bus change requests to approval system format
+      const formattedBusRequests = busChangeRequests.map(req => ({
+        id: req.id,
+        requestType: 'Bus Change',
+        studentName: req.studentName,
+        department: req.department,
+        details: `Change from ${req.currentRoute} to ${req.requestedRoute}`,
+        reason: req.reason,
+        status: req.status || 'Pending',
+        date: req.submittedDate,
+        approvalReason: req.approvalReason || ''
+      }));
+      
+      // Set the requests from localStorage
+      setRequests(formattedBusRequests);
+    };
+
+    loadRequests();
+
+    // Refresh when window gains focus
+    const handleFocus = () => {
+      loadRequests();
+    };
+
+    window.addEventListener('focus', handleFocus);
+    return () => window.removeEventListener('focus', handleFocus);
+  }, []);
 
   const [selectedRequest, setSelectedRequest] = useState(null);
   const [actionReason, setActionReason] = useState("");
-  const [filterStatus, setFilterStatus] = useState("All");
+  const [filterStatus, setFilterStatus] = useState("Approved");
 
   const handleApprove = (id) => {
     if (!actionReason.trim()) {
@@ -77,6 +58,14 @@ const ApprovalSystem = () => {
           : req
       )
     );
+    
+    // Also update in localStorage if it's a bus change request
+    const busChangeRequests = JSON.parse(localStorage.getItem('busChangeRequests') || '[]');
+    const updatedBusRequests = busChangeRequests.map(req =>
+      req.id === id ? { ...req, status: 'Approved', approvalReason: actionReason } : req
+    );
+    localStorage.setItem('busChangeRequests', JSON.stringify(updatedBusRequests));
+    
     setSelectedRequest(null);
     setActionReason("");
   };
@@ -97,6 +86,14 @@ const ApprovalSystem = () => {
           : req
       )
     );
+    
+    // Also update in localStorage if it's a bus change request
+    const busChangeRequests = JSON.parse(localStorage.getItem('busChangeRequests') || '[]');
+    const updatedBusRequests = busChangeRequests.map(req =>
+      req.id === id ? { ...req, status: 'Rejected', approvalReason: actionReason } : req
+    );
+    localStorage.setItem('busChangeRequests', JSON.stringify(updatedBusRequests));
+    
     setSelectedRequest(null);
     setActionReason("");
   };

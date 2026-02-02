@@ -21,8 +21,71 @@ function RequestRoute() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle form submission here
-    alert('Route change request submitted successfully!');
+    
+    // Validate form
+    if (!formData.requestedRoute || !formData.reason) {
+      alert('Please fill in all fields');
+      return;
+    }
+    
+    // Get student info from localStorage
+    const studentInfo = JSON.parse(localStorage.getItem('studentInfo') || '{}');
+    const userName = localStorage.getItem('userName') || 'Student';
+    
+    // Create request object
+    const request = {
+      id: Date.now(),
+      studentName: studentInfo.name || userName || 'Student',
+      rollNumber: studentInfo.rollNumber || 'N/A',
+      department: studentInfo.department || 'Not Specified',
+      currentRoute: formData.currentRoute,
+      requestedRoute: formData.requestedRoute,
+      reason: formData.reason,
+      status: 'Pending',
+      submittedDate: new Date().toLocaleDateString(),
+      submittedTime: new Date().toLocaleTimeString()
+    };
+    
+    console.log('Creating request:', request);
+    
+    // Get existing requests from localStorage
+    let existingRequests = [];
+    try {
+      const stored = localStorage.getItem('busChangeRequests');
+      if (stored) {
+        existingRequests = JSON.parse(stored);
+      }
+    } catch (error) {
+      console.error('Error parsing existing requests:', error);
+    }
+    
+    // Add new request
+    existingRequests.push(request);
+    
+    // Save updated requests
+    try {
+      localStorage.setItem('busChangeRequests', JSON.stringify(existingRequests));
+      console.log('Successfully saved. Total requests:', existingRequests.length);
+      console.log('Saved data:', localStorage.getItem('busChangeRequests'));
+      
+      // Verify it was saved
+      const verification = localStorage.getItem('busChangeRequests');
+      if (verification) {
+        console.log('Verification: Data is in localStorage ✓');
+      }
+    } catch (error) {
+      console.error('Error saving request:', error);
+      alert('Error saving request!');
+      return;
+    }
+    
+    alert(`Route change request submitted successfully!\n\nYour request:\nFrom: ${formData.currentRoute}\nTo: ${formData.requestedRoute}\n\nYou can view status in Transport Dashboard.`);
+    // Reset form
+    setFormData({
+      currentRoute: 'Erode – College',
+      requestedRoute: '',
+      reason: ''
+    });
     navigate('/student/dashboard');
   };
 

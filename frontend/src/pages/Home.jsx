@@ -9,25 +9,66 @@ export default function Home() {
   const navigate = useNavigate()
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [userName, setUserName] = useState('')
+  const [userRole, setUserRole] = useState('Student')
   const [showDropdown, setShowDropdown] = useState(false)
+  const [canGoBack, setCanGoBack] = useState(false)
 
   useEffect(() => {
-    const token = localStorage.getItem('token')
-    const name = localStorage.getItem('userName')
-    const studentInfo = localStorage.getItem('studentInfo')
-    
-    if (token) {
-      setIsLoggedIn(true)
-      if (studentInfo) {
-        try {
-          const info = JSON.parse(studentInfo)
-          setUserName(info.name || name || 'User')
-        } catch (e) {
+    const checkUserProfile = () => {
+      // Check if there's browser history
+      setCanGoBack(window.history.length > 1)
+
+      const token = localStorage.getItem('token')
+      const name = localStorage.getItem('userName')
+      const role = localStorage.getItem('role')
+      const studentInfo = localStorage.getItem('studentInfo')
+      
+      if (token) {
+        setIsLoggedIn(true)
+        // Set role - default to Student if not specified
+        console.log('Home - checking role:', role)
+        if (role && (role.toLowerCase().includes('transport') || role.toLowerCase().includes('admin'))) {
+          console.log('Setting userRole to Admin')
+          setUserRole('Admin')
+        } else {
+          console.log('Setting userRole to Student')
+          setUserRole('Student')
+        }
+        
+        if (studentInfo) {
+          try {
+            const info = JSON.parse(studentInfo)
+            setUserName(info.name || name || 'User')
+          } catch (e) {
+            setUserName(name || 'User')
+          }
+        } else {
           setUserName(name || 'User')
         }
-      } else {
-        setUserName(name || 'User')
       }
+    }
+
+    // Initial check
+    checkUserProfile()
+
+    // Re-check when window gains focus (navigating back from dashboard)
+    const handleFocus = () => {
+      checkUserProfile()
+    }
+
+    // Check role and update whenever page becomes visible
+    const handleVisibilityChange = () => {
+      if (!document.hidden) {
+        checkUserProfile()
+      }
+    }
+
+    window.addEventListener('focus', handleFocus)
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+    
+    return () => {
+      window.removeEventListener('focus', handleFocus)
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
     }
   }, [])
 
@@ -42,13 +83,30 @@ export default function Home() {
 
   const goToDashboard = () => {
     const role = localStorage.getItem('role')
-    if (role && role.includes('student')) {
+    console.log('goToDashboard - role:', role)
+    if (role && role.toLowerCase().includes('student')) {
+      console.log('Navigating to student dashboard')
       navigate('/student/dashboard')
+    } else if (role && (role.toLowerCase().includes('transport') || role.toLowerCase().includes('admin'))) {
+      console.log('Navigating to transport dashboard')
+      navigate('/admin/dashboard')
+    } else {
+      console.log('No matching role, navigating to home')
+      navigate('/')
     }
   }
 
   const getInitial = () => {
+    if (userRole === 'Admin') {
+      return 'A'
+    }
     return userName.charAt(0).toUpperCase()
+  }
+
+  const handleGoBack = () => {
+    if (canGoBack) {
+      window.history.back()
+    }
   }
 
   return (
@@ -94,15 +152,15 @@ export default function Home() {
                     <div className="dropdown-initial">{getInitial()}</div>
                     <div className="dropdown-info">
                       <p className="dropdown-name">{userName}</p>
-                      <p className="dropdown-role">Student</p>
+                      <p className="dropdown-role">{userRole}</p>
                     </div>
                   </div>
                   <div className="dropdown-divider"></div>
                   <button className="dropdown-item" onClick={goToDashboard}>
-                    <span></span> Dashboard
+                    Dashboard
                   </button>
                   <button className="dropdown-item logout-item" onClick={handleLogout}>
-                    <span></span> Logout
+                    Logout
                   </button>
                 </div>
               )}

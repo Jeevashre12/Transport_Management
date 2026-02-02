@@ -28,6 +28,7 @@ function App() {
 
         {/*Transport office Module */}
         <Route path="/admin/dashboard" element={<TransportDashboard />}/>
+        <Route path="/transport/dashboard" element={<TransportDashboard />}/>
       </Routes>
     </BrowserRouter>
   );

@@ -20,7 +20,29 @@ function ReportIssue() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle form submission here
+    
+    // Get student info from localStorage
+    const studentInfo = JSON.parse(localStorage.getItem('studentInfo') || '{}');
+    
+    // Create issue object
+    const issue = {
+      id: Date.now(),
+      studentName: studentInfo.name || 'Unknown',
+      rollNumber: studentInfo.rollNumber || 'N/A',
+      department: studentInfo.department || 'N/A',
+      issueType: formData.issueType,
+      description: formData.description,
+      status: 'Pending',
+      submittedDate: new Date().toLocaleDateString(),
+      submittedTime: new Date().toLocaleTimeString()
+    };
+    
+    // Save to localStorage
+    const existingIssues = JSON.parse(localStorage.getItem('reportedIssues') || '[]');
+    existingIssues.push(issue);
+    localStorage.setItem('reportedIssues', JSON.stringify(existingIssues));
+    
+    console.log('Issue reported:', issue);
     alert('Issue reported successfully! We will look into it.');
     navigate('/student/dashboard');
   };
