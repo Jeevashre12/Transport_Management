@@ -9,6 +9,7 @@ import RouteDetails from "./pages/student/RouteDetails";
 import RequestRoute from "./pages/student/RequestRoute";
 import ReportIssue from "./pages/student/ReportIssue";
 import Notifications from "./pages/student/Notifications";
+import Support from "./pages/transportOffice/Support";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/support" element={<Support />} />
 
         {/* Student Module */}
         <Route path="/student/dashboard" element={<StudentDashboard />} />

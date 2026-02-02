@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import '../styles/Home.css'
-import { FaUsers } from 'react-icons/fa'
 import homeImage from '../assets/home.webp'
 import homeLogo from '../assets/klogo.png'
 
@@ -74,9 +73,31 @@ export default function Home() {
 
           <ul className="nav-menu">
             <li><a href="#home" className="nav-link">Home</a></li>
-            <li><a href="#support" className="nav-link">Support</a></li>
+            <li>
+              <a
+                href="/support"
+                className="nav-link"
+                onClick={(e) => {
+                  e.preventDefault()
+                  navigate('/support')
+                }}
+              >
+                Support
+              </a>
+            </li>
             <li><a href="#support" className="nav-link">Routes</a></li>
-            <li><a href="#support" className="nav-link">Support</a></li>
+            <li>
+              <a
+                href="/support"
+                className="nav-link"
+                onClick={(e) => {
+                  e.preventDefault()
+                  navigate('/support')
+                }}
+              >
+                Support
+              </a>
+            </li>
           </ul>
 
           {isLoggedIn ? (
