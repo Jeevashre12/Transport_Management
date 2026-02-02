@@ -51,7 +51,7 @@
   padding: 40px 20px;
   display: flex;
   justify-content: center;
-  margin-top: -180px;
+  margin-top: -250px;
   position: relative;
   z-index: 2;
 }
@@ -119,6 +119,46 @@
   color: #111827;
   overflow: hidden;
   position: relative;
+}
+/* Modal overlay */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+/* Modal */
+.modal {
+  background: #fff;
+  width: 520px;
+  max-height: 80vh;
+  padding: 20px;
+  border-radius: 14px;
+  overflow-y: auto;     /* modal scroll */
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* MAP BOX – THIS IS THE BOX YOU WANT */
+.map-wrapper {
+  width: 100%;
+  height: 220px;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  overflow: hidden;     /* 🔒 LOCK MAP INSIDE */
+  position: relative;
+}
+
+/* Leaflet internal fixes */
+.map-wrapper .leaflet-container {
+  width: 100% !important;
+  height: 100% !important;
+  position: absolute !important;
+  inset: 0;
 }
 
 
@@ -252,5 +292,9 @@
 .leaflet-map {
   width: 100%;
   height: 100%;
+}
+/* Kill Leaflet Routing instruction panel */
+.leaflet-routing-container {
+  display: none !important;
 }
 
