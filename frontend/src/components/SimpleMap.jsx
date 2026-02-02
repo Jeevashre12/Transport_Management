@@ -1,56 +1,48 @@
-import { MapContainer, TileLayer, Marker, Polyline, useMap } from "react-leaflet";
 import { useEffect } from "react";
+import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import "../components/MapUtils"; // marker icon fix
-
-/* This component forces Leaflet to resize + fit route */
-function FitAndResize({ stops }) {
-  const map = useMap();
-
-  useEffect(() => {
-    if (!stops || stops.length === 0) return;
-
-    const bounds = stops.map(s => [s.lat, s.lng]);
-
-    // small delay so modal finishes rendering
-    setTimeout(() => {
-      map.invalidateSize();
-      map.fitBounds(bounds, { padding: [20, 20] });
-    }, 200);
-  }, [map, stops]);
-
-  return null;
-}
+import "leaflet-routing-machine";
 
 function SimpleMap({ stops }) {
-  if (!stops || stops.length === 0) return null;
+  useEffect(() => {
+    if (!stops || stops.length < 2) return;
 
-  const polylinePositions = stops.map(s => [s.lat, s.lng]);
+    const map = L.map("map").setView(
+      [stops[0].lat, stops[0].lng],
+      10
+    );
 
-  return (
-    <div className="map-wrapper">
-      <MapContainer
-        center={[stops[0].lat, stops[0].lng]}
-        zoom={10}
-        scrollWheelZoom={false}
-        dragging={true}
-        className="leaflet-map"
-      >
-        <TileLayer
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution="&copy; OpenStreetMap contributors"
-        />
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution: "© OpenStreetMap"
+    }).addTo(map);
 
-        <FitAndResize stops={stops} />
+    // Markers
+    stops.forEach(stop => {
+      L.marker([stop.lat, stop.lng])
+        .addTo(map)
+        .bindPopup(stop.name);
+    });
 
-        {stops.map((stop, i) => (
-          <Marker key={i} position={[stop.lat, stop.lng]} />
-        ))}
+    // 🛣️ ROAD FOLLOWING ROUTE
+    L.Routing.control({
+      waypoints: stops.map(stop =>
+        L.latLng(stop.lat, stop.lng)
+      ),
+      addWaypoints: false,
+      draggableWaypoints: false,
+      show: false,
+      createMarker: () => null,
+      lineOptions: {
+        styles: [{ weight: 5 }]
+      }
+    }).addTo(map);
 
-        <Polyline positions={polylinePositions} />
-      </MapContainer>
-    </div>
-  );
+    return () => {
+      map.remove();
+    };
+  }, [stops]);
+
+  return <div id="map" style={{ height: "100%", width: "100%" }} />;
 }
 
 export default SimpleMap;
