@@ -9,7 +9,7 @@ import RouteDetails from "./pages/student/RouteDetails";
 import RequestRoute from "./pages/student/RequestRoute";
 import ReportIssue from "./pages/student/ReportIssue";
 import Notifications from "./pages/student/Notifications";
-
+import TransportDashboard from "./pages/transportOffice/TransportDashboard";
 function App() {
   return (
     <BrowserRouter>
@@ -25,6 +25,9 @@ function App() {
         <Route path="/student/request-route" element={<RequestRoute />} />
         <Route path="/student/report-issue" element={<ReportIssue />} />
         <Route path="/student/notifications" element={<Notifications />} />
+
+        {/*Transport office Module */}
+        <Route path="/admin/dashboard" element={<TransportDashboard />}/>
       </Routes>
     </BrowserRouter>
   );
