@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { FaClock, FaEnvelope, FaPhoneAlt, FaRoute, FaSearch, FaUserShield } from 'react-icons/fa'
+import { FaClock, FaEnvelope, FaPhoneAlt, FaRoute } from 'react-icons/fa'
 import homeLogo from '../../assets/klogo.png'
 import '../../styles/Home.css'
 import './Support.css'
@@ -19,8 +19,8 @@ export default function Support() {
   })
   const [submitted, setSubmitted] = useState(false)
 
-  const supportEmail = 'transport.support@campus.edu'
-  const supportPhone = '+1 (555) 014-2210'
+  const supportEmail = 'transport.support@kongu.edu'
+  const supportPhone = '+91 98427 20087'
   const officeHours = 'Mon–Sat, 8:00 AM – 6:00 PM'
 
   useEffect(() => {
@@ -58,20 +58,6 @@ export default function Support() {
         icon: <FaClock />,
         actionLabel: 'Report Timing Issue',
         category: 'Schedule & Timing Support',
-      },
-      {
-        title: 'Lost & Found Help',
-        description: 'Report lost items, check recent finds, and track recovery status.',
-        icon: <FaSearch />,
-        actionLabel: 'Report Lost Item',
-        category: 'Lost & Found Help',
-      },
-      {
-        title: 'Account/Login Support',
-        description: 'Assistance with login problems, profile issues, and access.',
-        icon: <FaUserShield />,
-        actionLabel: 'Get Account Help',
-        category: 'Account/Login Support',
       },
       {
         title: 'Emergency Contact',
@@ -303,7 +289,7 @@ export default function Support() {
                 <div className="support-contact-row">
                   <FaPhoneAlt />
                   <div>
-                    <p className="support-contact-label">Transport Office Phone</p>
+                    <p className="support-contact-label">Transport Office Phone (Mr. Sakthivel – Transport Maintenance)</p>
                     <a className="support-contact-value" href={`tel:${supportPhone.replace(/[^+\d]/g, '')}`}>
                       {supportPhone}
                     </a>
@@ -347,7 +333,7 @@ export default function Support() {
                     <input
                       id="support-email"
                       type="email"
-                      placeholder="name@college.edu"
+                      placeholder="name@kongu.edu"
                       value={formData.email}
                       onChange={(e) => setFormData((p) => ({ ...p, email: e.target.value }))}
                       required
@@ -364,8 +350,6 @@ export default function Support() {
                   >
                     <option>Bus Route Assistance</option>
                     <option>Schedule & Timing Support</option>
-                    <option>Lost & Found Help</option>
-                    <option>Account/Login Support</option>
                     <option>Emergency Contact</option>
                   </select>
                 </div>
