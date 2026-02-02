@@ -86,18 +86,6 @@ export default function Home() {
               </a>
             </li>
             <li><a href="#support" className="nav-link">Routes</a></li>
-            <li>
-              <a
-                href="/support"
-                className="nav-link"
-                onClick={(e) => {
-                  e.preventDefault()
-                  navigate('/support')
-                }}
-              >
-                Support
-              </a>
-            </li>
           </ul>
 
           {isLoggedIn ? (
