@@ -6,7 +6,8 @@ const jwt = require('jsonwebtoken')
 const mongoose = require('mongoose')
 
 const app = express()
-const allowedOrigins = ['http://localhost:5173', 'http://localhost:5174', process.env.FRONTEND_ORIGIN].filter(Boolean)
+// Allow all localhost ports for development
+const allowedOrigins = ['http://localhost:5173', 'http://localhost:5174', 'http://localhost:5175', 'http://localhost:5176', 'http://localhost:3000', process.env.FRONTEND_ORIGIN].filter(Boolean)
 app.use(cors({ origin: allowedOrigins }))
 app.use(express.json())
 
