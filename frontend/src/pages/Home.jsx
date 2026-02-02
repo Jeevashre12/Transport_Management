@@ -1,10 +1,56 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import '../styles/Home.css'
 import { FaUsers } from 'react-icons/fa'
 import homeImage from '../assets/home.webp'
 import homeLogo from '../assets/klogo.png'
 
 export default function Home() {
+  const navigate = useNavigate()
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [userName, setUserName] = useState('')
+  const [showDropdown, setShowDropdown] = useState(false)
+
+  useEffect(() => {
+    const token = localStorage.getItem('token')
+    const name = localStorage.getItem('userName')
+    const studentInfo = localStorage.getItem('studentInfo')
+    
+    if (token) {
+      setIsLoggedIn(true)
+      if (studentInfo) {
+        try {
+          const info = JSON.parse(studentInfo)
+          setUserName(info.name || name || 'User')
+        } catch (e) {
+          setUserName(name || 'User')
+        }
+      } else {
+        setUserName(name || 'User')
+      }
+    }
+  }, [])
+
+  const handleLogout = () => {
+    localStorage.removeItem('token')
+    localStorage.removeItem('role')
+    localStorage.removeItem('userName')
+    setIsLoggedIn(false)
+    setShowDropdown(false)
+    navigate('/')
+  }
+
+  const goToDashboard = () => {
+    const role = localStorage.getItem('role')
+    if (role && role.includes('student')) {
+      navigate('/student/dashboard')
+    }
+  }
+
+  const getInitial = () => {
+    return userName.charAt(0).toUpperCase()
+  }
+
   return (
     <div className="home">
 
@@ -33,8 +79,37 @@ export default function Home() {
             <li><a href="#support" className="nav-link">Support</a></li>
           </ul>
 
-          <a href="/login" className="nav-button">Login / Sign Up</a>
-          <button className="nav-button">Login / Sign Up</button>
+          {isLoggedIn ? (
+            <div className="user-profile">
+              <div 
+                className="profile-circle" 
+                onClick={() => setShowDropdown(!showDropdown)}
+                title={userName}
+              >
+                {getInitial()}
+              </div>
+              {showDropdown && (
+                <div className="profile-dropdown">
+                  <div className="dropdown-header">
+                    <div className="dropdown-initial">{getInitial()}</div>
+                    <div className="dropdown-info">
+                      <p className="dropdown-name">{userName}</p>
+                      <p className="dropdown-role">Student</p>
+                    </div>
+                  </div>
+                  <div className="dropdown-divider"></div>
+                  <button className="dropdown-item" onClick={goToDashboard}>
+                    <span></span> Dashboard
+                  </button>
+                  <button className="dropdown-item logout-item" onClick={handleLogout}>
+                    <span></span> Logout
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <button className="nav-button" onClick={() => navigate('/login')}>Login / Sign Up</button>
+          )}
         </div>
       </nav>
 
@@ -55,7 +130,7 @@ export default function Home() {
               and a smoother commute for everyone.
             </p>
 
-            <button className="cta-button">
+            <button className="cta-button" onClick={() => navigate('/signup')}>
               Get Started — It's Free!
             </button>
           </div>
