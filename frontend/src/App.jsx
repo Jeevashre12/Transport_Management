@@ -11,6 +11,12 @@ import ReportIssue from "./pages/student/ReportIssue";
 import Notifications from "./pages/student/Notifications";
 import Support from "./pages/transportOffice/Support";
 
+import Requests from "./pages/dept_coordinator/Requests";
+import IssueReports from "./pages/dept_coordinator/IssueReports";
+import CoordNotifications from "./pages/dept_coordinator/CoordNotifications";
+import DeptCoordinatorDashboard from './pages/dept_coordinator/DeptCoordinatorDashboard';
+
+
 function App() {
   return (
     <BrowserRouter>
@@ -27,7 +33,18 @@ function App() {
         <Route path="/student/request-route" element={<RequestRoute />} />
         <Route path="/student/report-issue" element={<ReportIssue />} />
         <Route path="/student/notifications" element={<Notifications />} />
+
+       {/* Coordinator Module */}
+<Route path="/dept_coordinator/dashboard" element={<DeptCoordinatorDashboard />} />
+<Route path="/dept_coordinator/requests" element={<Requests />} />
+<Route path="/dept_coordinator/coordnotifications" element={<CoordNotifications />} />
+<Route path="/dept_coordinator/issues" element={<IssueReports />} />
+
+
       </Routes>
+
+      
+        
     </BrowserRouter>
   );
 }
