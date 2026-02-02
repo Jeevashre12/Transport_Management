@@ -4,9 +4,11 @@ const transportRequestSchema = new mongoose.Schema({
   department: { type: String, required: true },
   coordinatorName: { type: String, required: true },
   date: { type: String, required: true },
+  startDate: String,
+  endDate: String,
   startTime: String,
   endTime: String,
-  route: { type: String, required: true },
+  route: { type: String },
   studentCount: { type: Number, required: true },
   purpose: String,
   status: {

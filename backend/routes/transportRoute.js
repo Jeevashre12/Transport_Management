@@ -5,6 +5,15 @@ const TransportRequest = require('../models/TransportRequest')
 // CREATE request (Department Coordinator)
 router.post('/request', async (req, res) => {
   try {
+    // Normalize incoming body: if startDate provided, set date for backward compatibility
+    if (req.body.startDate && !req.body.date) {
+      req.body.date = req.body.startDate
+    }
+    // ensure numeric studentCount
+    if (req.body.studentCount) {
+      req.body.studentCount = Number(req.body.studentCount)
+    }
+
     const request = await TransportRequest.create(req.body)
     res.json({ success: true, request })
   } catch (err) {

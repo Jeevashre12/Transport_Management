@@ -1,22 +1,24 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Modal from "react-modal";
-import { FaPlus, FaBell, FaExclamationCircle, FaEdit, FaCheck, FaTimes } from "react-icons/fa";
+import { FaPlus, FaBell, FaExclamationCircle, FaRegCalendarAlt, FaRegClock } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import { authFetch } from "../../utils/authFetch";
 import "./DeptCoordinatorDashboard.css";
-  
-// Backend API base (use Vite env var if provided)
-const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:5000';
 
-
+const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:5000";
 Modal.setAppElement("#root");
 
-const Dashboard = () => {
+export default function DeptCoordinatorDashboard() {
+  const navigate = useNavigate();
   const [requests, setRequests] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
+
   const [formData, setFormData] = useState({
-    department: localStorage.getItem('department') || "",
-    coordinatorName: localStorage.getItem('userName') || "",
-    date: "",
+    department: localStorage.getItem("department") || "",
+    coordinatorName: localStorage.getItem("userName") || "",
+    startDate: "",
+    endDate: "",
     startTime: "",
     endTime: "",
     yearSection: "",
@@ -25,21 +27,15 @@ const Dashboard = () => {
     studentCount: "",
   });
 
-  // Fetch requests from backend
+  // ✅ TOKEN-PROTECTED FETCH (CORRECT ENDPOINT)
   const fetchRequests = async () => {
     try {
-      const res = await axios.get(`${API_BASE}/api/transport/requests`);
-      // Defensive: backend should return an array, but handle wrapped or unexpected shapes
-      // and log the payload for debugging in devtools.
-      // Examples handled: [] | { requests: [] } | { success: true, request: {...} }
-      // Prefer an array when available, otherwise fall back to empty array.
-      // eslint-disable-next-line no-console
-      console.log('fetch /api/requests ->', res.data);
-      const payload = res.data;
-      if (Array.isArray(payload)) setRequests(payload);
-      else if (Array.isArray(payload.requests)) setRequests(payload.requests);
-      else if (Array.isArray(payload.data)) setRequests(payload.data);
-      else setRequests([]);
+      const res = await authFetch(
+        `${API_BASE}/api/transport/requests`
+      );
+      const data = await res.json();
+      console.log("Fetched requests:", data);
+      setRequests(Array.isArray(data) ? data : []);
     } catch (err) {
       console.error("Error fetching requests", err);
     }
@@ -49,87 +45,106 @@ const Dashboard = () => {
     fetchRequests();
   }, []);
 
-  // Handle form input change
+  // Focus or open native picker for inputs when icons are clicked
+  const focusInput = (name) => {
+    const el = document.querySelector(`input[name="${name}"], select[name="${name}"]`);
+    if (!el) return;
+    // use showPicker when available (Chromium)
+    if (typeof el.showPicker === "function") {
+      try {
+        el.showPicker();
+        return;
+      } catch (e) {
+        // fallthrough to focus
+      }
+    }
+    el.focus();
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  // Submit new request
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Send payload matching backend schema at /api/transport/request
-      const payload = {
-        department: formData.department,
-        coordinatorName: formData.coordinatorName,
-        date: formData.date,
-        startTime: formData.startTime,
-        endTime: formData.endTime,
-        route: formData.route,
-        studentCount: Number(formData.studentCount) || 0,
-        purpose: formData.purpose,
-      };
-      const res = await axios.post(`${API_BASE}/api/transport/request`, payload);
-      // eslint-disable-next-line no-console
-      console.log('post /api/transport/request ->', res.data);
-      setModalIsOpen(false);
-      setFormData({
-        department: localStorage.getItem('department') || "",
-        coordinatorName: localStorage.getItem('userName') || "",
-        date: "",
-        startTime: "",
-        endTime: "",
-        yearSection: "",
-        route: "",
-        purpose: "",
-        studentCount: "",
+      await authFetch(`${API_BASE}/api/transport/request`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          department: formData.department,
+          coordinatorName: formData.coordinatorName,
+          startDate: formData.startDate,
+          endDate: formData.endDate,
+          startTime: formData.startTime,
+          endTime: formData.endTime,
+          route: formData.route,
+          studentCount: Number(formData.studentCount),
+          purpose: formData.purpose,
+        }),
       });
-      fetchRequests(); // Refresh table
+
+      setModalIsOpen(false);
+      fetchRequests();
     } catch (err) {
-      console.error("Error adding request", err);
+      console.error("Error submitting request", err);
     }
   };
+const totalRequests = requests.length;
+
+const approvedCount = requests.filter(
+  r => r.status?.toLowerCase() === "approved"
+).length;
+
+const pendingCount = requests.filter(
+  r => r.status?.toLowerCase() === "pending"
+).length;
+
+const rejectedCount = requests.filter(
+  r => r.status?.toLowerCase() === "rejected"
+).length;
+
+
 
   return (
     <div className="dashboard-container dashboard-theme">
-      {/* Header */}
       <header className="dashboard-header">
         <h1>Department Coordinator Dashboard</h1>
         <div className="header-buttons">
           <button onClick={() => setModalIsOpen(true)}>
             <FaPlus /> New Request
           </button>
-          <button>
-            <FaBell /> Notifications
-          </button>
-          <button>
-            <FaExclamationCircle /> Issues
-          </button>
+          <button><FaBell /> Notifications</button>
+          <button onClick={() => navigate('/dept_coordinator/issues')}><FaExclamationCircle /> Issues</button>
         </div>
       </header>
 
-      {/* Stats Cards */}
+      {/* Stats */}
       <div className="stats-cards">
-        <div className="card total">
-          <h3>Total Requests</h3>
-          <p>{requests.length}</p>
-        </div>
-        <div className="card pending">
-          <h3>Pending</h3>
-          <p>{requests.filter(r => r.status === "Pending").length}</p>
-        </div>
-        <div className="card approved">
-          <h3>Approved</h3>
-          <p>{requests.filter(r => r.status === "Approved").length}</p>
-        </div>
-        <div className="card rejected">
-          <h3>Rejected</h3>
-          <p>{requests.filter(r => r.status === "Rejected").length}</p>
-        </div>
-      </div>
+  <div className="card total">
+    <h3>Total Requests</h3>
+    <p>{totalRequests}</p>
+  </div>
 
-      {/* Requests Table */}
+  <div className="card approved">
+    <h3>Approved</h3>
+    <p>{approvedCount}</p>
+  </div>
+
+  <div className="card pending">
+    <h3>Pending</h3>
+    <p>{pendingCount}</p>
+  </div>
+
+  <div className="card rejected">
+    <h3>Rejected</h3>
+    <p>{rejectedCount}</p>
+  </div>
+</div>
+
+
+      {/* Table */}
       <div className="requests-table">
         <table>
           <thead>
@@ -143,25 +158,21 @@ const Dashboard = () => {
             </tr>
           </thead>
           <tbody>
-            {requests.map(req => (
+            {requests.map((req) => (
               <tr key={req._id}>
                 <td>{req.department}</td>
                 <td>{req.coordinatorName}</td>
-                <td>{req.date ? new Date(req.date).toLocaleDateString() : '-'}</td>
-                <td>{req.startTime || '-'}</td>
-                <td>{req.endTime || '-'}</td>
-                <td>
-                  <span className={`status-badge ${req.status.toLowerCase()}`}>
-                    {req.status}
-                  </span>
-                </td>
+                <td>{new Date(req.date).toLocaleDateString()}</td>
+                <td>{req.startTime || "-"}</td>
+                <td>{req.endTime || "-"}</td>
+                <td>{req.status}</td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
 
-      {/* Modal Request Form */}
+      {/* Modal */}
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={() => setModalIsOpen(false)}
@@ -172,50 +183,82 @@ const Dashboard = () => {
         <form onSubmit={handleSubmit} className="request-form">
           <label>
             Department
-            <input type="text" name="department" value={formData.department} onChange={handleChange} required />
+            <select name="department" value={formData.department} onChange={handleChange}>
+              <option value="">Select department</option>
+              <option value="CSE">CSE</option>
+              <option value="IT">IT</option>
+              <option value="AIML">AIML</option>
+              <option value="AIDS">AIDS</option>
+              <option value="CSD">CSD</option>
+              <option value="EEE">EEE</option>
+              <option value="ECE">ECE</option>
+              <option value="EIE">EIE</option>
+              <option value="CHEM">CHEM</option>
+              <option value="AUTO">AUTO</option>
+              <option value="CIVIL">CIVIL</option>
+              <option value="MECH">MECH</option>
+              <option value="MECHATRONIC">MECHATRONIC</option>
+              <option value="BSC">BSC</option>
+              <option value="MSC">MSC</option>
+              <option value="MBA">MBA</option>
+              <option value="PLACEMENT CELL">PLACEMENT CELL</option>
+              <option value="TRAINING CELL">TRAINING CELL</option>
+            </select>
           </label>
+
           <label>
-            Coordinator Name
-            <input type="text" name="coordinatorName" value={formData.coordinatorName} onChange={handleChange} readOnly />
+            Coordinator
+            <input name="coordinatorName" value={formData.coordinatorName} readOnly />
           </label>
+
           <label>
-            Date(s) of Extra Class
-            <input type="date" name="date" value={formData.date} onChange={handleChange} required />
+            Date (start)
+            <div className="input-with-icon">
+              <FaRegCalendarAlt className="input-icon" aria-hidden="true" onClick={() => focusInput('startDate')} role="button" />
+              <input type="date" name="startDate" value={formData.startDate} onChange={handleChange} />
+            </div>
           </label>
-          <div style={{ display: 'flex', gap: '10px' }}>
-            <label style={{ flex: 1 }}>
-              Start Time
+
+          <label>
+            Date (end)
+            <div className="input-with-icon">
+              <FaRegCalendarAlt className="input-icon" aria-hidden="true" onClick={() => focusInput('endDate')} role="button" />
+              <input type="date" name="endDate" value={formData.endDate} onChange={handleChange} />
+            </div>
+          </label>
+
+          <label>
+            Start Time
+            <div className="input-with-icon">
+              <FaRegClock className="input-icon" aria-hidden="true" onClick={() => focusInput('startTime')} role="button" />
               <input type="time" name="startTime" value={formData.startTime} onChange={handleChange} />
-            </label>
-            <label style={{ flex: 1 }}>
-              End Time
-              <input type="time" name="endTime" value={formData.endTime} onChange={handleChange} />
-            </label>
-          </div>
-          <label>
-            Year / Section
-            <input type="text" name="yearSection" value={formData.yearSection} onChange={handleChange} />
+            </div>
           </label>
+
+          <label>
+            End Time
+            <div className="input-with-icon">
+              <FaRegClock className="input-icon" aria-hidden="true" onClick={() => focusInput('endTime')} role="button" />
+              <input type="time" name="endTime" value={formData.endTime} onChange={handleChange} />
+            </div>
+          </label>
+
           <label>
             Subject / Purpose
-            <input type="text" name="purpose" value={formData.purpose} onChange={handleChange} />
+            <textarea name="purpose" value={formData.purpose} onChange={handleChange} />
           </label>
+
           <label>
             Expected Student Count
-            <input type="number" name="studentCount" value={formData.studentCount} onChange={handleChange} required />
+            <input type="number" name="studentCount" min="0" value={formData.studentCount} onChange={handleChange} />
           </label>
-          <label>
-            Route
-            <input type="text" name="route" value={formData.route} onChange={handleChange} />
-          </label>
+
           <div className="form-buttons">
-            <button type="submit">Submit</button>
             <button type="button" onClick={() => setModalIsOpen(false)}>Cancel</button>
+            <button type="submit">Submit</button>
           </div>
         </form>
       </Modal>
     </div>
   );
-};
-
-export default Dashboard;
+}

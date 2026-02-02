@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken')
 const mongoose = require('mongoose')
 
 const transportRoute = require('./routes/transportRoute')
+const issueRoute = require('./routes/issueRoute')
 
 
 const app = express()
@@ -14,6 +15,7 @@ app.use(cors({ origin: allowedOrigins }))
 app.use(express.json())
 
 app.use('/api/transport', transportRoute)
+app.use('/api/issues', issueRoute)
 
 
 const JWT_SECRET = process.env.JWT_SECRET || 'dev_secret_key'
