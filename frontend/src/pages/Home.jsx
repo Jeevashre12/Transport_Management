@@ -177,7 +177,7 @@ export default function Home() {
         <div className="hero-inner">
 
           {/* LEFT SIDE TEXT */}
-          <div className="hero-content">
+          <div  className="hero-content">
             <h1 className="hero-title">
               <span className="title-white">Smart Campus</span>{' '}
               <span className="title-yellow">Transport</span><br />

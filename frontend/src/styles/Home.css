@@ -290,6 +290,8 @@ body {
 /* ================= HERO ================= */
 
 .hero {
+  min-height: 100vh !important;
+  /* margin-top: 250px; */
   background: linear-gradient(
     135deg,
     var(--dark-bg),
@@ -303,6 +305,7 @@ body {
 
 .hero-inner {
   display: flex;
+  flex-direction: row !important;
   justify-content: space-between;
   align-items: center;
   max-width: 1400px;
@@ -382,8 +385,8 @@ body {
 }
 
 .hero-image {
-  width: 798px;
-  height: 466px;
+  width: 698px;
+  height: 366px;
   display: block;
   border-radius: 18px;
   filter: saturate(1.05);
