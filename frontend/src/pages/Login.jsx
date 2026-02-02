@@ -29,7 +29,7 @@ export default function Login() {
         window.location.href = '/student/dashboard'
       }
       else if (role.includes('placement') || role.includes('department')) {
-        window.location.href = '/placement/dashboard'
+        window.location.href = '/dept_coordinator/dashboard'
       }
       else if (role.includes('admin') || role.includes('officer')) {
         window.location.href = '/admin/dashboard'

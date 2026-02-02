@@ -22,7 +22,7 @@ export default function Home() {
       const name = localStorage.getItem('userName')
       const role = localStorage.getItem('role')
       const studentInfo = localStorage.getItem('studentInfo')
-      
+
       if (token) {
         setIsLoggedIn(true)
         // Set role - default to Student if not specified
@@ -34,7 +34,7 @@ export default function Home() {
           console.log('Setting userRole to Student')
           setUserRole('Student')
         }
-        
+
         if (studentInfo) {
           try {
             const info = JSON.parse(studentInfo)
@@ -65,7 +65,7 @@ export default function Home() {
 
     window.addEventListener('focus', handleFocus)
     document.addEventListener('visibilitychange', handleVisibilityChange)
-    
+
     return () => {
       window.removeEventListener('focus', handleFocus)
       document.removeEventListener('visibilitychange', handleVisibilityChange)
@@ -131,17 +131,14 @@ export default function Home() {
           </div>
 
           <ul className="nav-menu">
-  <li><Link to="/" className="nav-link">Home</Link></li>
-  <li><Link to="/support" className="nav-link">Support</Link></li>
-  <li><Link to="/student/route" className="nav-link">Routes</Link></li>
-</ul>
-
-
-
+            <li><Link to="/" className="nav-link">Home</Link></li>
+            <li><Link to="/support" className="nav-link">Support</Link></li>
+            <li><Link to="/student/route" className="nav-link">Routes</Link></li>
+          </ul>
           {isLoggedIn ? (
             <div className="user-profile">
-              <div 
-                className="profile-circle" 
+              <div
+                className="profile-circle"
                 onClick={() => setShowDropdown(!showDropdown)}
                 title={userName}
               >
@@ -177,7 +174,7 @@ export default function Home() {
         <div className="hero-inner">
 
           {/* LEFT SIDE TEXT */}
-          <div  className="hero-content">
+          <div className="hero-content">
             <h1 className="hero-title">
               <span className="title-white">Smart Campus</span>{' '}
               <span className="title-yellow">Transport</span><br />
@@ -190,7 +187,7 @@ export default function Home() {
             </p>
 
             <button className="cta-button" onClick={() => navigate('/signup')}>
-              Get Started 
+              Get Started
             </button>
           </div>
 
@@ -206,7 +203,7 @@ export default function Home() {
         </div>
       </section>
 
-    
+
     </div>
   )
 }
