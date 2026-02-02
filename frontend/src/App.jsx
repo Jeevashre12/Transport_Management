@@ -11,6 +11,13 @@ import RouteDetails from "./pages/student/RouteDetails";
 import RequestRoute from "./pages/student/RequestRoute";
 import ReportIssue from "./pages/student/ReportIssue";
 import Notifications from "./pages/student/Notifications";
+import Support from "./pages/transportOffice/Support";
+
+import Requests from "./pages/dept_coordinator/Requests";
+import IssueReports from "./pages/dept_coordinator/IssueReports";
+import CoordNotifications from "./pages/dept_coordinator/CoordNotifications";
+import DeptCoordinatorDashboard from './pages/dept_coordinator/DeptCoordinatorDashboard';
+
 
 // Transport office
 import TransportDashboard from "./pages/transportOffice/TransportDashboard";
@@ -37,16 +44,24 @@ function App() {
         <Route path="/student/report-issue" element={<ReportIssue />} />
         <Route path="/student/notifications" element={<Notifications />} />
 
-  {/* Transport office Module */}
-  <Route path="/admin/dashboard" element={<TransportDashboard />}/>
-  <Route path="/admin/approvals" element={<ApprovalSystem />}/>
+        {/* Transport office Module */}
+        <Route path="/admin/dashboard" element={<TransportDashboard />}/>
+        <Route path="/admin/approvals" element={<ApprovalSystem />}/>
 
-  {/* Department Coordinator Module */}
-  <Route path="/dept/dashboard" element={<DeptCoordinatorDashboard />}/>
-  <Route path="/dept/requests" element={<DeptRequests />}/>
-  <Route path="/dept/issues" element={<DeptIssueReports />}/>
-  <Route path="/dept/notifications" element={<DeptNotifications />}/>
+        {/* Department Coordinator Module (two path variants supported) */}
+        <Route path="/dept/dashboard" element={<DeptCoordinatorDashboard />}/>
+        <Route path="/dept/requests" element={<DeptRequests />}/>
+        <Route path="/dept/issues" element={<DeptIssueReports />}/>
+        <Route path="/dept/notifications" element={<DeptNotifications />}/>
+
+        <Route path="/dept_coordinator/dashboard" element={<DeptCoordinatorDashboard />}/>
+        <Route path="/dept_coordinator/requests" element={<DeptRequests />}/>
+        <Route path="/dept_coordinator/issues" element={<DeptIssueReports />}/>
+        <Route path="/dept_coordinator/coordnotifications" element={<DeptNotifications />}/>
       </Routes>
+
+      
+        
     </BrowserRouter>
   );
 }

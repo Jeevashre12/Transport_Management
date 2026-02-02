@@ -131,12 +131,10 @@ export default function Home() {
           </div>
 
           <ul className="nav-menu">
-  <li><Link to="/" className="nav-link">Home</Link></li>
-  <li><Link to="/support" className="nav-link">Support</Link></li>
-  <li><Link to="/student/route" className="nav-link">Routes</Link></li>
-</ul>
-
-
+            <li><Link to="/" className="nav-link">Home</Link></li>
+            <li><Link to="/support" className="nav-link">Support</Link></li>
+            <li><Link to="/student/route" className="nav-link">Routes</Link></li>
+          </ul>
 
           {isLoggedIn ? (
             <div className="user-profile">
