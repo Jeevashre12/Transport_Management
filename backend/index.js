@@ -5,10 +5,16 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const mongoose = require('mongoose')
 
+const transportRoute = require('./routes/transportRoute')
+
+
 const app = express()
 const allowedOrigins = ['http://localhost:5173', 'http://localhost:5174', process.env.FRONTEND_ORIGIN].filter(Boolean)
 app.use(cors({ origin: allowedOrigins }))
 app.use(express.json())
+
+app.use('/api/transport', transportRoute)
+
 
 const JWT_SECRET = process.env.JWT_SECRET || 'dev_secret_key'
 const MONGODB_URI = process.env.MONGODB_URI || ''
