@@ -1,0 +1,236 @@
+/* ===== GLOBAL RESET ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* ===== HERO SECTION ===== */
+.hero {
+  height: 50vh;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.hero-inner {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-content {
+  text-align: center;
+  color: #ffffff;
+}
+
+.hero-title {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.hero-subtitle {
+  font-size: 1.2rem;
+  opacity: 0.9;
+}
+
+/* ===== ROUTE TABLE ===== */
+.route-container {
+  padding: 40px 20px;
+  display: flex;
+  justify-content: center;
+  margin-top: -180px;
+  position: relative;
+  z-index: 2;
+}
+
+.route-table {
+  width: 90%;
+  max-width: 900px;
+  border-collapse: collapse;
+  background-color: #ffffff;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.route-table thead {
+  background-color: #202637;
+}
+
+.route-table th {
+  padding: 16px;
+  color: #ffffff;
+  font-weight: 600;
+  text-align: center;
+}
+
+.route-table td {
+  padding: 15px;
+  text-align: center;
+  color: #111827;
+}
+
+.route-table tbody tr {
+  background-color: #aab1d6;
+}
+
+.route-table button {
+  padding: 8px 16px;
+  background-color: #2a354d;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* ===== MODAL OVERLAY ===== */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+/* ===== MODAL CARD ===== */
+.modal {
+  background: #ffffff;
+  width: 520px;
+  max-width: 95%;
+  padding: 36px 40px;
+  border-radius: 16px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+  animation: scaleIn 0.3s ease;
+  color: #111827;
+}
+
+/* ===== MODAL TITLE ===== */
+.modal h3 {
+  font-size: 24px;
+  margin-bottom: 18px;
+  text-align: center;
+  color: #1d253b;
+}
+
+/* ===== STOPPINGS (COMPACT) ===== */
+.modal ul {
+  list-style: none;
+  margin-bottom: 22px;
+}
+
+.modal ul li {
+  padding: 6px 0;              /* 🔑 reduced spacing */
+  font-size: 15px;             /* 🔑 slightly smaller */
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.modal ul li:last-child {
+  border-bottom: none;
+}
+
+
+/* ===== BUS DETAILS ===== */
+.bus-details {
+  margin-top: 26px;
+  border-spacing: 0 10px;
+}
+
+.bus-details h4 {
+  font-size: 19px;
+  margin-bottom: 16px;
+  text-align: center;
+  color: #1f2937;
+}
+
+/* Make table stretch fully */
+.bus-details table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 20px; /* 🔑 vertical row spacing */
+}
+
+/* Header */
+.bus-details th {
+  padding: 10px 18px;
+  text-align: left;
+  font-size: 14px;
+  font-weight: 600;
+  color: #6b7280;
+}
+
+/* Data cells */
+.bus-details td {
+  padding: 12px 18px;        /* 🔑 more horizontal space */
+  font-size: 16px;
+  font-weight: 600;
+  color: #111827;
+}
+
+/* Highlight driver & incharge */
+.bus-details td:nth-child(2),
+.bus-details td:nth-child(3) {
+  color: #1d4ed8;
+}
+
+/* Optional subtle background per row (looks clean) */
+.bus-details tbody tr {
+  background: #f8fafc;
+  border-radius: 8px;
+}
+
+/* Rounded effect */
+.bus-details tbody tr td:first-child {
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+}
+
+.bus-details tbody tr td:last-child {
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+/* ===== CLOSE BUTTON ===== */
+.modal button {
+  margin-top: 26px;
+  padding: 10px 26px;
+  background-color: #dc2626;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  cursor: pointer;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.modal button:hover {
+  background-color: #b91c1c;
+}
+
+/* ===== ANIMATION ===== */
+@keyframes scaleIn {
+  from {
+    transform: scale(0.85);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}

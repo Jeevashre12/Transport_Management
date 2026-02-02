@@ -3,6 +3,7 @@ import '../styles/Home.css'
 import { FaUsers } from 'react-icons/fa'
 import homeImage from '../assets/home.webp'
 import homeLogo from '../assets/klogo.png'
+import { Link } from 'react-router-dom';
 
 export default function Home() {
   return (
@@ -27,11 +28,12 @@ export default function Home() {
           </div>
 
           <ul className="nav-menu">
-            <li><a href="#home" className="nav-link">Home</a></li>
-            <li><a href="#support" className="nav-link">Support</a></li>
-            <li><a href="#support" className="nav-link">Routes</a></li>
-            <li><a href="#support" className="nav-link">Support</a></li>
-          </ul>
+  <li><Link to="/" className="nav-link">Home</Link></li>
+  <li><Link to="/support" className="nav-link">Support</Link></li>
+  <li><Link to="/student/route" className="nav-link">Routes</Link></li>
+</ul>
+
+
 
           <a href="/login" className="nav-button">Login / Sign Up</a>
           <button className="nav-button">Login / Sign Up</button>
