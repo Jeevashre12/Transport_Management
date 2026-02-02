@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import '../styles/Home.css'
 import homeImage from '../assets/home.webp'
 import homeLogo from '../assets/klogo.png'
+import { Link } from 'react-router-dom';
 
 export default function Home() {
   const navigate = useNavigate()
@@ -130,21 +131,12 @@ export default function Home() {
           </div>
 
           <ul className="nav-menu">
-            <li><a href="#home" className="nav-link">Home</a></li>
-            <li>
-              <a
-                href="/support"
-                className="nav-link"
-                onClick={(e) => {
-                  e.preventDefault()
-                  navigate('/support')
-                }}
-              >
-                Support
-              </a>
-            </li>
-            <li><a href="#support" className="nav-link">Routes</a></li>
-          </ul>
+  <li><Link to="/" className="nav-link">Home</Link></li>
+  <li><Link to="/support" className="nav-link">Support</Link></li>
+  <li><Link to="/student/route" className="nav-link">Routes</Link></li>
+</ul>
+
+
 
           {isLoggedIn ? (
             <div className="user-profile">
