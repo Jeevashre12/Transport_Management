@@ -1,0 +1,211 @@
+.signup-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  background: linear-gradient(180deg, #0f2430 0%, #0b1d26 100%);
+  padding: 20px 0 60px 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.signup-card {
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border: 1px solid rgba(255,255,255,0.04);
+  color: #fff;
+  border-radius: 12px;
+  padding: 40px;
+  width: 100%;
+  max-width: 520px;
+  animation: slideUp 0.45s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.signup-header {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.signup-header h1 {
+  font-size: 28px;
+  color: #ffd055;
+  margin: 0 0 6px 0;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.signup-subtitle {
+  color: #cfe8f2;
+  font-size: 14px;
+  margin: 0;
+  font-weight: 500;
+}
+
+.signup-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-size: 12px;
+  font-weight: 700;
+  color: #91c2d8;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+
+.form-input {
+  padding: 12px 14px;
+  border: 1px solid rgba(255,255,255,0.06);
+  background: rgba(255,255,255,0.02);
+  border-radius: 8px;
+  font-size: 15px;
+  color: #e9fbff;
+  transition: all 0.18s ease;
+  font-family: inherit;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: rgba(255,210,90,0.95);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+}
+
+.form-input::placeholder {
+  color: rgba(255,255,255,0.35);
+}
+
+.error-message {
+  background-color: rgba(255,40,40,0.06);
+  border-left: 4px solid rgba(255,40,40,0.9);
+  color: #ffb3b3;
+  padding: 10px 14px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.success-message {
+  background-color: rgba(60,200,120,0.06);
+  border-left: 4px solid rgba(60,200,120,0.9);
+  color: #bff1d0;
+  padding: 10px 14px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 18px;
+}
+
+.submit-button {
+  padding: 12px 16px;
+  background: transparent;
+  color: #0b1d26;
+  border: 2px solid #ffd055;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: 6px;
+  background-color: #ffd055;
+}
+
+.submit-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.6);
+}
+
+.submit-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.signup-footer {
+  text-align: center;
+  margin-top: 20px;
+  padding-top: 18px;
+}
+
+.signup-footer p {
+  color: #9fc8d8;
+  margin: 0;
+  font-size: 14px;
+}
+
+.login-link {
+  color: #ffd055;
+  text-decoration: none;
+  font-weight: 800;
+  transition: color 0.3s ease;
+}
+
+.login-link:hover {
+  color: #fff;
+  text-decoration: none;
+}
+
+/* Header styles matching BUSSYNC theme */
+.site-header {
+  width: 100%;
+  background: transparent;
+  padding: 18px 24px;
+  box-sizing: border-box;
+}
+.site-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.site-header .logo {
+  font-weight: 900;
+  color: #ffd055;
+  letter-spacing: 1px;
+  font-size: 20px;
+}
+.nav-actions .nav-btn {
+  color: #ffd055;
+  border: 2px solid #ffd055;
+  padding: 8px 14px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 700;
+}
+.nav-actions .nav-btn:hover {
+  background: rgba(255,208,85,0.08);
+}
+}
+
+@media (max-width: 480px) {
+  .signup-card {
+    padding: 30px 20px;
+  }
+
+  .signup-header h1 {
+    font-size: 28px;
+  }
+
+  .form-input {
+    font-size: 16px;
+  }
+}

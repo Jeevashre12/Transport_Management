@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import './Login.css'
 
 export default function Login() {
   const [email, setEmail] = useState('')
@@ -19,11 +20,23 @@ export default function Login() {
       const data = await res.json()
       if (!res.ok) throw new Error(data.message || 'Login failed')
       localStorage.setItem('token', data.token)
-      // role-based redirect (no dashboard pages created)
+      localStorage.setItem('role', data.role)
+      localStorage.setItem('userName', data.name)
+      
+      // role-based redirect
       const role = (data.role || '').toString().toLowerCase()
-      if (role.includes('student')) window.location.href = '/student'
-      else if (role.includes('placement') || role.includes('department')) window.location.href = '/placement'
-      else window.location.href = '/admin'
+      if (role.includes('student')) {
+        window.location.href = '/student/dashboard'
+      }
+      else if (role.includes('placement') || role.includes('department')) {
+        window.location.href = '/placement/dashboard'
+      }
+      else if (role.includes('admin') || role.includes('officer')) {
+        window.location.href = '/admin/dashboard'
+      }
+      else {
+        window.location.href = '/'
+      }
     } catch (err) {
       setError(err.message)
       setLoading(false)
@@ -31,28 +44,57 @@ export default function Login() {
   }
 
   return (
-    <div style={{ padding: 20 }}>
-      <h2>Login</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Email</label>
-          <br />
-          <input value={email} onChange={e => setEmail(e.target.value)} type="email" required />
+    <div className="login-container">
+      <div className="login-card">
+        <div className="login-header">
+          <h1>BusSync</h1>
+          <p className="login-subtitle">Welcome Back</p>
         </div>
-        <div style={{ marginTop: 8 }}>
-          <label>Password</label>
-          <br />
-          <input value={password} onChange={e => setPassword(e.target.value)} type="password" required />
-        </div>
-        <div style={{ marginTop: 12 }}>
-          <button type="submit" disabled={loading}>{loading ? 'Logging in...' : 'Login'}</button>
-        </div>
-        {error && <p style={{ color: 'red' }}>{error}</p>}
-      </form>
 
-      <p>
-        Don't have an account? <a href="/signup">Sign up</a>
-      </p>
+        <form onSubmit={handleSubmit} className="login-form">
+          <div className="form-group">
+            <label htmlFor="email">Email Address</label>
+            <input 
+              id="email"
+              type="email" 
+              value={email} 
+              onChange={e => setEmail(e.target.value)} 
+              placeholder="Enter your email"
+              required 
+              className="form-input"
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="password">Password</label>
+            <input 
+              id="password"
+              type="password" 
+              value={password} 
+              onChange={e => setPassword(e.target.value)} 
+              placeholder="Enter your password"
+              required 
+              className="form-input"
+            />
+          </div>
+
+          {error && <div className="error-message">{error}</div>}
+
+          <button 
+            type="submit" 
+            disabled={loading}
+            className="submit-button"
+          >
+            {loading ? 'Logging in...' : 'Login'}
+          </button>
+        </form>
+
+        <div className="login-footer">
+          <p>
+            Don't have an account? <a href="/signup" className="signup-link">Sign up here</a>
+          </p>
+        </div>
+      </div>
     </div>
   )
 }

@@ -13,6 +13,10 @@ app.use(express.json())
 const JWT_SECRET = process.env.JWT_SECRET || 'dev_secret_key'
 const MONGODB_URI = process.env.MONGODB_URI || ''
 
+// In-memory user storage (fallback when MongoDB is unavailable)
+const inMemoryUsers = []
+let mongoConnected = false
+
 // Mongoose User model
 const userSchema = new mongoose.Schema({
   name: { type: String, required: true },
@@ -22,6 +26,35 @@ const userSchema = new mongoose.Schema({
 }, { timestamps: true })
 
 const User = mongoose.models.User || mongoose.model('User', userSchema)
+
+// User management functions
+const UserManager = {
+  async findOne(query) {
+    if (mongoConnected) {
+      return await User.findOne(query)
+    }
+    return inMemoryUsers.find(u => {
+      if (query.email) return u.email === query.email
+      if (query._id) return u._id === query._id
+      return false
+    })
+  },
+
+  async create(data) {
+    if (mongoConnected) {
+      const user = new User(data)
+      return await user.save()
+    }
+    const user = {
+      _id: Math.random().toString(36).substr(2, 9),
+      ...data,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    }
+    inMemoryUsers.push(user)
+    return user
+  }
+}
 
 function generateToken(payload) {
   return jwt.sign(payload, JWT_SECRET, { expiresIn: '8h' })
@@ -34,15 +67,14 @@ app.post('/api/auth/signup', async (req, res) => {
   }
 
   try {
-    const existing = await User.findOne({ email })
+    const existing = await UserManager.findOne({ email })
     if (existing) return res.status(409).json({ message: 'User already exists' })
 
     const hash = await bcrypt.hash(password, 10)
-    const user = new User({ name, email, passwordHash: hash, role })
-    await user.save()
+    const user = await UserManager.create({ name, email, passwordHash: hash, role })
 
     const token = generateToken({ id: user._id.toString(), role: user.role, name: user.name, email: user.email })
-    res.json({ token, role: user.role })
+    res.json({ token, role: user.role, name: user.name })
   } catch (err) {
     console.error('Signup error', err)
     res.status(500).json({ message: 'Server error' })
@@ -54,14 +86,14 @@ app.post('/api/auth/login', async (req, res) => {
   if (!email || !password) return res.status(400).json({ message: 'Missing fields' })
 
   try {
-    const user = await User.findOne({ email })
+    const user = await UserManager.findOne({ email })
     if (!user) return res.status(401).json({ message: 'Invalid credentials' })
 
     const ok = await bcrypt.compare(password, user.passwordHash)
     if (!ok) return res.status(401).json({ message: 'Invalid credentials' })
 
     const token = generateToken({ id: user._id.toString(), role: user.role, name: user.name, email: user.email })
-    res.json({ token, role: user.role })
+    res.json({ token, role: user.role, name: user.name })
   } catch (err) {
     console.error('Login error', err)
     res.status(500).json({ message: 'Server error' })
@@ -94,11 +126,19 @@ app.get('/api/auth/me', authMiddleware, async (req, res) => {
 
 async function start() {
   try {
-    if (!MONGODB_URI) {
-      console.warn('MONGODB_URI not set. Please set it to connect to Atlas.')
+    if (MONGODB_URI) {
+      try {
+        await mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+        mongoConnected = true
+        console.log('Connected to MongoDB')
+      } catch (mongoErr) {
+        console.warn('MongoDB connection failed:', mongoErr.message)
+        console.warn('Using in-memory storage instead...')
+        mongoConnected = false
+      }
     } else {
-      await mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-      console.log('Connected to MongoDB')
+      console.warn('MONGODB_URI not set. Using in-memory storage.')
+      mongoConnected = false
     }
 
     const PORT = process.env.PORT || 5000

@@ -1,12 +1,30 @@
 import "./StudentDashboard.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 function StudentDashboard() {
-  const [studentInfo] = useState({
-    name: "Jane Doe",
+  const navigate = useNavigate();
+  
+  const [studentInfo, setStudentInfo] = useState({
+    name: localStorage.getItem('userName') || "Student",
     rollNumber: "29-01",
     department: "Computer Science"
   });
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    const role = localStorage.getItem('role');
+    
+    if (!token) {
+      navigate('/login');
+      return;
+    }
+    
+    if (!role.includes('student')) {
+      navigate('/');
+      return;
+    }
+  }, [navigate]);
 
   const [busInfo, setBusInfo] = useState(null);
   const [formData, setFormData] = useState({
@@ -45,6 +63,13 @@ function StudentDashboard() {
     }
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('role');
+    localStorage.removeItem('userName');
+    navigate('/login');
+  };
+
   const handleEditDetails = () => {
     setBusInfo(null);
     setFormData({
@@ -69,7 +94,7 @@ function StudentDashboard() {
             <p>Roll Number: <span>{studentInfo.rollNumber}</span></p>
             <p>Department: <span>{studentInfo.department}</span></p>
           </div>
-          <button className="logout-btn">Logout</button>
+          <button className="logout-btn" onClick={handleLogout}>Logout</button>
         </div>
       </header>
 
