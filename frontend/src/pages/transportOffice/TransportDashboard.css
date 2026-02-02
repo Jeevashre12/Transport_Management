@@ -1,0 +1,98 @@
+.transport-dashboard {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  background-color: #f5f7fb;
+  min-height: 100vh;
+}
+
+.dashboard-header h1 {
+  margin: 0;
+  color: #1f2937;
+}
+
+.dashboard-header p {
+  color: #6b7280;
+  margin-bottom: 20px;
+}
+
+/* Stats Cards */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.stat-card {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.stat-card h3 {
+  font-size: 14px;
+  color: #374151;
+}
+
+.stat-card p {
+  font-size: 28px;
+  font-weight: bold;
+  margin-top: 10px;
+  color: #2563eb;
+}
+
+/* Content */
+.dashboard-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+/* Quick Actions */
+.quick-actions {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.quick-actions h2 {
+  margin-bottom: 15px;
+}
+
+.quick-actions button {
+  display: block;
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 10px;
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.quick-actions button:hover {
+  background-color: #1e40af;
+}
+
+/* Alerts */
+.alerts-panel {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.alerts-panel h2 {
+  margin-bottom: 10px;
+}
+
+.alerts-panel ul {
+  list-style: none;
+  padding: 0;
+}
+
+.alerts-panel li {
+  padding: 10px 0;
+  border-bottom: 1px solid #e5e7eb;
+}
