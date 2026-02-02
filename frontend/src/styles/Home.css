@@ -115,17 +115,18 @@ body {
 
 .nav-menu {
   display: flex;
-  gap: 2.5rem;
+  gap: 3rem;
   list-style: none;
   flex-grow: 1;
   margin-left: 2rem;
+  justify-content: center;
 }
 
 .nav-link {
   color: var(--text-white);
   text-decoration: none;
-  font-weight: 500;
-  font-size: 0.95rem;
+  font-weight: 600;
+  font-size: 1.1rem;
   opacity: 0.8;
   transition: all 0.3s ease;
 }

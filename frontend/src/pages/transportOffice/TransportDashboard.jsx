@@ -18,30 +18,42 @@ const TransportDashboard = () => {
     setUserName('Admin');
 
     // Load bus change requests from localStorage on component mount
-    const requests = JSON.parse(localStorage.getItem('busChangeRequests') || '[]');
-    console.log('Initial load - requests from localStorage:', requests);
-    setBusChangeRequests(requests);
+    const loadRequests = () => {
+      const requests = JSON.parse(localStorage.getItem('busChangeRequests') || '[]');
+      console.log('Initial load - requests from localStorage:', requests);
+      setBusChangeRequests(requests);
+    };
+
+    loadRequests();
 
     // Load reported issues from localStorage
-    const issues = JSON.parse(localStorage.getItem('reportedIssues') || '[]');
-    console.log('Initial load - issues from localStorage:', issues);
-    setReportedIssues(issues);
+    const loadIssues = () => {
+      const issues = JSON.parse(localStorage.getItem('reportedIssues') || '[]');
+      console.log('Initial load - issues from localStorage:', issues);
+      setReportedIssues(issues);
+    };
+
+    loadIssues();
 
     // Refresh requests when window gains focus
     const handleFocus = () => {
       console.log('Window focused - refreshing requests');
-      const updatedRequests = JSON.parse(localStorage.getItem('busChangeRequests') || '[]');
-      setBusChangeRequests(updatedRequests);
-      
-      const updatedIssues = JSON.parse(localStorage.getItem('reportedIssues') || '[]');
-      setReportedIssues(updatedIssues);
+      loadRequests();
+      loadIssues();
     };
+
+    // Also poll every 2 seconds for new requests
+    const pollInterval = setInterval(() => {
+      loadRequests();
+      loadIssues();
+    }, 2000);
 
     window.addEventListener('focus', handleFocus);
 
     // Cleanup
     return () => {
       window.removeEventListener('focus', handleFocus);
+      clearInterval(pollInterval);
     };
   }, []);
 
@@ -50,6 +62,10 @@ const TransportDashboard = () => {
     const requests = JSON.parse(localStorage.getItem('busChangeRequests') || '[]');
     console.log('Loaded requests from localStorage:', requests);
     console.log('Number of requests:', requests.length);
+    if (requests.length === 0) {
+      console.warn('No requests found in localStorage');
+      console.log('localStorage keys:', Object.keys(localStorage));
+    }
     setBusChangeRequests(requests);
     setShowRequestsModal(true);
   };
