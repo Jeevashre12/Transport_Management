@@ -10,6 +10,11 @@ import RequestRoute from "./pages/student/RequestRoute";
 import ReportIssue from "./pages/student/ReportIssue";
 import Notifications from "./pages/student/Notifications";
 import TransportDashboard from "./pages/transportOffice/TransportDashboard";
+import ApprovalSystem from "./pages/transportOffice/ApprovalSystem";
+import DeptCoordinatorDashboard from "./pages/dept_coordinator/DeptCoordinatorDashboard";
+import DeptRequests from "./pages/dept_coordinator/DeptRequests";
+import DeptIssueReports from "./pages/dept_coordinator/DeptIssueReports";
+import DeptNotifications from "./pages/dept_coordinator/DeptNotifications";
 function App() {
   return (
     <BrowserRouter>
@@ -28,6 +33,13 @@ function App() {
 
         {/*Transport office Module */}
         <Route path="/admin/dashboard" element={<TransportDashboard />}/>
+        <Route path="/admin/approvals" element={<ApprovalSystem />}/>
+
+        {/* Department Coordinator Module */}
+        <Route path="/dept/dashboard" element={<DeptCoordinatorDashboard />}/>
+        <Route path="/dept/requests" element={<DeptRequests />}/>
+        <Route path="/dept/issues" element={<DeptIssueReports />}/>
+        <Route path="/dept/notifications" element={<DeptNotifications />}/>
       </Routes>
     </BrowserRouter>
   );
