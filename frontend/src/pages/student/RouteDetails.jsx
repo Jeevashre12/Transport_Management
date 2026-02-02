@@ -1,6 +1,8 @@
 import { useState } from "react";
 import routeBg from "../../assets/route_bg.jpeg";
 import "./RouteDetails.css";
+import SimpleMap from "../../components/SimpleMap";
+
 
 function RouteDetails() {
   const [selectedRoute, setSelectedRoute] = useState(null);
@@ -9,7 +11,12 @@ function RouteDetails() {
     {
       name: "Erode – College",
       buses: 20,
-      stops: ["Erode", "Perundurai", "Kangeyam", "College"],
+      stops: [
+        { name: "Erode", lat: 11.3410, lng: 77.7172 },
+        { name: "Perundurai", lat: 11.3148, lng: 77.5660 },
+        { name: "Kangeyam", lat: 11.0457, lng: 77.5360 },
+        { name: "College", lat: 11.0123, lng: 77.5555 }
+      ],
       busDetails: [
         { busNo: "Bus Number 10", driver: "Ramesh", incharge: "Suresh" },
         { busNo: "Bus Number 20", driver: "Kumar", incharge: "Mahesh" }
@@ -18,7 +25,11 @@ function RouteDetails() {
     {
       name: "Sathyamangalam – College",
       buses: 2,
-      stops: ["Sathyamangalam", "Gobichettipalayam", "College"],
+      stops: [
+        { name: "Sathyamangalam", lat: 11.5295, lng: 77.0058 },
+        { name: "Gobichettipalayam", lat: 11.4333, lng: 77.4333 },
+        { name: "College", lat: 11.0123, lng: 77.5555 }
+      ],
       busDetails: [
         { busNo: "TN36 CD 1122", driver: "Senthil", incharge: "Ravi" }
       ]
@@ -26,7 +37,11 @@ function RouteDetails() {
     {
       name: "Gobi – College",
       buses: 6,
-      stops: ["Gobi", "Nambiyur", "College"],
+      stops: [
+        { name: "Gobi", lat: 11.4260, lng: 77.0847 },
+        { name: "Nambiyur", lat: 11.2500, lng: 77.4800 },
+        { name: "College", lat: 11.0123, lng: 77.5555 }
+      ],
       busDetails: [
         { busNo: "TN38 EF 3344", driver: "Arun", incharge: "Vijay" },
         { busNo: "TN38 EF 5566", driver: "Karthik", incharge: "Prakash" }
@@ -83,12 +98,17 @@ function RouteDetails() {
           <div className="modal">
             <h3>{selectedRoute.name}</h3>
 
+            {/* MINI MAP */}
+            <div style={{ width: "100%", height: "200px", marginBottom: "15px" }}>
+              <SimpleMap stops={selectedRoute.stops} />
+            </div>
+
             {/* STOPS SECTION */}
             <div className="modal-section">
               <h4>Stoppings</h4>
               <ul className="stops-list">
                 {selectedRoute.stops.map((stop, i) => (
-                  <li key={i}>{stop}</li>
+                  <li key={i}>{stop.name}</li>
                 ))}
               </ul>
             </div>
@@ -108,8 +128,8 @@ function RouteDetails() {
                   {selectedRoute.busDetails.map((bus, i) => (
                     <tr key={i}>
                       <td>{bus.busNo}</td>
-                      <td>{bus.driver}</td>
-                      <td>{bus.incharge}</td>
+                      <td className="driver">{bus.driver}</td>
+                      <td className="incharge">{bus.incharge}</td>
                     </tr>
                   ))}
                 </tbody>
